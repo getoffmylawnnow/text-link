@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Open in Messages</title>
+<style>
+  body{font-family:-apple-system,system-ui,sans-serif;margin:0;padding:24px;background:#f5f5f7;color:#111;text-align:center}
+  .btn{display:block;margin:24px auto;padding:20px;max-width:420px;background:#34c759;color:#fff;font-size:22px;font-weight:600;text-decoration:none;border-radius:14px}
+  .box{max-width:420px;margin:12px auto;text-align:left;background:#fff;border-radius:12px;padding:14px}
+  .label{font-size:13px;color:#666;margin-bottom:4px}
+  .val{font-size:17px;white-space:pre-wrap;word-break:break-word;user-select:all;-webkit-user-select:all}
+  .err{color:#b00}
+</style>
+</head>
+<body>
+<h1>Open in Messages</h1>
+<div id="main">
+  <a id="open" class="btn" href="#">Open in Messages</a>
+  <p>If Messages doesn't open, copy these:</p>
+  <div class="box"><div class="label">To</div><div id="to" class="val"></div></div>
+  <div class="box"><div class="label">Message</div><div id="body" class="val"></div></div>
+</div>
+<p id="err" class="err" hidden>No number in this link.</p>
+<script>
+(function(){
+  var p = new URLSearchParams(location.hash.replace(/^#/, ''));
+  var to = (p.get('to') || '').replace(/[^0-9+]/g, '');
+  var body = p.get('body') || '';
+  if (!to) { document.getElementById('main').hidden = true; document.getElementById('err').hidden = false; return; }
+  var url = 'sms:' + to + (body ? '&body=' + encodeURIComponent(body) : '');
+  document.getElementById('open').href = url;
+  document.getElementById('to').textContent = to;
+  document.getElementById('body').textContent = body;
+  setTimeout(function(){ window.location.href = url; }, 300);
+})();
+</script>
+</body>
+</html>
